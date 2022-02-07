@@ -45,3 +45,23 @@ Entretanto, se for necessária alguma funcionalidade que implique esperar pela o
 
 ## Filas de eventos (loop)
 
+Para que possamos ter funcionalidade assíncrona, as aplicações podem adotar um dos dois caminhos a seguir. O primeiro seria criar uma *thread* para cada processo que consuma tempo. O resto do código poder ser distribuido dessa forma, em paralelo. O problema com essa solução é que as threads são **"caras"**, consumindo muitos recursos da máquina e gerando grande complexidade na aplicação.
+
+O segundo caminho é adotar uma arquitetura baseada em eventos. Quando um processo que consome tempo é invocado, a aplicação não espera que ele termine. Em vez disso, o processo sinaliza quando ja tiver terminado pela emissão de um sinal de evento. Esse evento é adicionado à *fila de eventos*, ou *event loop*. Qualquer funcionalidade dependendo desse evento registra seu interesse nele, e quando o evento é finalizado retirado da fila e processado, a funcionalidade dependente é chamada, e dos dados relacionados ao evento são passadas a ela.
+
+Tanto o javascript no navegador  quanto o no Node empregam o segundo caminho. No navegador, quando adicionamos um manipulador de cliques de mouse(*click handler*) a um elemento, o que você na verdade fez foi se "cadastrar"(ou assinar) um evento e fornecer uma função de callback, que será chamada quando o evento acontecer, liberando o resto da aplicação para que continue:
+
+## Criando um função assincrona de callback
+
+### Funcionalidades-chaves:
+
+- Garanta que o último argumento seja uma função de callback.
+- Crie uma objeto *Error* do Node e, se um erro ocorrer, devolva esse objeto como primeiro argumento da função callback.
+- Se não ocorrerem erros, chame a função callback, atribua o valor *null* ao argumento de erro e passe ao callback quaisquer dados relevantes.
+- A função de callback deve ser chamada de dentro da função *process.nextTick()* para garantir que não haja bloqueio.
+
+## EventEmitter
+
+Toda vez que virmos um objeto emitir um evento usando a palavra-chave **emit** e logo em seguida um evento tratado pela função **on**, estaremos presenciando o **EventEmitter** em ação.
+
+O **EventEmitter** permite tratar eventos assíncronos no Node.
