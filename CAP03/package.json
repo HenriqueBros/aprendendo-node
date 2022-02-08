@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "async": "^3.2.3",
+    "commander": "^9.0.0",
+    "underscore": "^1.13.2"
+  },
+  "name": "cap03",
+  "version": "1.0.0",
+  "main": "commander.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
